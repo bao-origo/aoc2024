@@ -1,5 +1,5 @@
-# Very dirty ruby solutions to aoc 2024
+# very dirty ruby solutions to aoc 2024
 
-Install Ruby, then run each file for solution.
+install ruby, then run each file for solution.
 
 ~ bao
