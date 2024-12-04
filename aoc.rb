@@ -37,8 +37,7 @@ module AOC
       File.write(file_path, JSON.pretty_generate(cache))
       response.body
     else
-      puts "Error fetching input: #{response.code} #{response.message}"
-      nil
+      raise "Error fetching input: #{response.code} #{response.message}"
     end
   end
 end
