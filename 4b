@@ -1,114 +1,183 @@
 #!/usr/bin/env ruby
-puts "TODO"
-exit
+
+pattern1 = <<'EOF'
+M.S
+.A.
+M.S
+EOF
+$pattern1 = pattern1.split("\n")
+
+pattern2 = <<'EOF'
+S.S
+.A.
+M.M
+EOF
+$pattern2 = pattern2.split("\n")
+
+pattern3 = <<'EOF'
+S.M
+.A.
+S.M
+EOF
+$pattern3 = pattern3.split("\n")
+
+pattern4 = <<'EOF'
+M.M
+.A.
+S.S
+EOF
+$pattern4 = pattern4.split("\n")
+
+def match(matrix, i, j)
+  # Check if the pattern fits within the matrix bounds
+  return false if i + 2 >= matrix.size || j + 2 >= matrix[0].size
+
+  # Check against each pattern
+  patterns = [$pattern1, $pattern2, $pattern3, $pattern4]
+  patterns.each do |pattern|
+    ok = true
+    for y in 0...3
+      for x in 0...3
+        if pattern[x][y] == '.'
+          next
+        end
+        if matrix[i + x][j + y] != pattern[x][y]
+          ok = false
+          break
+        end
+      end
+      break unless ok
+    end
+    return true if ok
+  end
+  return false
+end
+
+def matches(matrix, rows, cols)
+  count = 0
+  for j in 0...(rows - 2)  # Adjusted to rows - 2
+    for i in 0...(cols - 2)  # Adjusted to cols - 2
+      if match(matrix, i, j)
+        count += 1
+      end
+    end
+  end
+  return count
+end
+
+#def match(matrix, i, j)
+#  ok = true
+#  for y in 0...3
+#    for x in 0...3
+#      if $pattern1[x][y] == '.'
+#        next
+#      end
+#      if matrix[i + x][j + y] == $pattern1[x][y]
+#        next
+#      end
+#      ok = false
+#    end
+#  end
+#  if ok
+#    return true
+#  end
+#  ok = true
+#  for y in 0...3
+#    for x in 0...3
+#      if $pattern2[x][y] == '.'
+#        next
+#      end
+#      if matrix[i + x][j + y] == $pattern2[x][y]
+#        next
+#      end
+#      ok = false
+#    end
+#  end
+#  if ok
+#    return true
+#  end
+#  ok = true
+#  for y in 0...3
+#    for x in 0...3
+#      if $pattern3[x][y] == '.'
+#        next
+#      end
+#      if matrix[i + x][j + y] == $pattern3[x][y]
+#        next
+#      end
+#      ok = false
+#    end
+#  end
+#  if ok
+#    return true
+#  end
+#  ok = true
+#  for y in 0...3
+#    for x in 0...3
+#      if $pattern4[x][y] == '.'
+#        next
+#      end
+#      if matrix[i + x][j + y] == $pattern4[x][y]
+#        next
+#      end
+#      ok = false
+#    end
+#  end
+#  return ok
+#end
+
+#def matches(matrix, rows, cols)
+#  p rows, cols
+#  count = 0
+#  for j in 0...rows
+#    if rows <= j+3
+#      next
+#    end
+#    for i in 0...cols
+#      if cols <= i+3
+#        next
+#      end
+#      if match(matrix, i, j)
+#        count += 1
+#      end
+#    end
+#  end
+#  return count
+#end
+
+#def matches(matrix, rows, cols)
+#  count = 0
+#  for j in 0...(rows - 2)  # Adjusted to rows - 2
+#    for i in 0...(cols - 2)  # Adjusted to cols - 2
+#      if match(matrix, i, j)
+#        count += 1
+#      end
+#    end
+#  end
+#  return count
+#end
+
+#test_input = <<'EOF'
+#.M.S.......M.S...... 
+#..A..MSMS...A..MSMS.
+#.M.S.MAA...M.S.MAA..
+#..A.ASMSM...A.ASMSM.
+#.M.S.M.....M.S.M....
+#....................
+#S.S.S.S.S.S.S.S.S.S.
+#.A.A.A.A...A.A.A.A..
+#M.M.M.M.M.M.M.M.M.M.
+#....................
+#EOF
+#test_input = test_input.split("\n")
+#puts matches(test_input, test_input.size, test_input[0].size)
 
 require_relative 'aoc'
 input = AOC.read(4)
 
 matrix = input.split("\n")
 
-# Get the number of rows and columns.
 rows = matrix.size
 cols = matrix[0].size
 
-#########################################################################################
-# YOU'RE ENTERING THE MATRIX                                                            #
-# YOUR LIFE IS A LIE MADE BY AN AUTONOMOUS AI USING YOU AS A DURACELL BATTERY FOR POWER #
-# (https://www.youtube.com/watch?v=O5b0ZxUWNf0)                                         #
-# WAKE UP                                                                               #
-# (and learn kung fu)                                                                   #
-#########################################################################################
-
-# Initialize an array to hold lines.
-lines = []
-
-def read_diagonally_topleft_bottomright(lines)
-  diagonals = []
-  n = lines.length
-  m = lines[0].length
-
-  # Read from top-left to bottom-right diagonals
-  (0...n).each do |start_row|
-    row, col = start_row, 0
-    diagonal = ""
-    while row < n && col < m
-      diagonal << lines[row][col]
-      row += 1
-      col += 1
-    end
-    diagonals << diagonal
-  end
-
-  (1...m).each do |start_col|
-    row, col = 0, start_col
-    diagonal = ""
-    while row < n && col < m
-      diagonal << lines[row][col]
-      row += 1
-      col += 1
-    end
-    diagonals << diagonal
-  end
-
-  diagonals
-end
-
-lines = lines + read_diagonally_topleft_bottomright(matrix)
-lines = lines + read_diagonally_topleft_bottomright(matrix).map {|line| line.reverse}
-
-def read_diagonally_top_right_to_bottom_left(lines)
-  diagonals = []
-  n = lines.length
-  m = lines[0].length
-
-  # Read from top-right to bottom-left diagonals
-  (0...n).each do |start_row|
-    row, col = start_row, m - 1
-    diagonal = ""
-    while row < n && col >= 0
-      diagonal << lines[row][col]
-      row += 1
-      col -= 1
-    end
-    diagonals << diagonal
-  end
-
-  (0...m - 1).each do |start_col|
-    row, col = 0, start_col
-    diagonal = ""
-    while row < n && col >= 0
-      diagonal << lines[row][col]
-      row += 1
-      col -= 1
-    end
-    diagonals << diagonal
-  end
-
-  diagonals
-end
-
-lines = lines + read_diagonally_top_right_to_bottom_left(matrix)
-lines = lines + read_diagonally_top_right_to_bottom_left(matrix).map {|line| line.reverse}
-
-# Read row lines.
-matrix.each do |line|
-  lines << line
-  lines << line.reverse
-end
-
-# Read column lines.
-(0...cols).each do |col|
-  column = []
-  (0...rows).each do |row|
-    column << matrix[row][col]
-  end
-  lines << column.join
-  lines << column.join.reverse
-end
-
-# Count the number of XMAS.
-count = 0
-lines.each do |line|
-  count += line.scan(/XMAS/).size
-end
-puts count
+puts matches(matrix, rows, cols)
