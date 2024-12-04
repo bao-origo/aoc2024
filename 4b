@@ -1,4 +1,7 @@
 #!/usr/bin/env ruby
+puts "TODO"
+exit
+
 require_relative 'aoc'
 input = AOC.read(4)
 
