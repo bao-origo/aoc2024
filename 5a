@@ -21,7 +21,7 @@ def correct?(update)
     # Check if both numbers in the rule exists in the update.
     next unless rule.all? {|num| update.include?(num)}
 
-    # Check if the update obeys the rules.
+    # Check if the update obeys the rule.
     ok = false
     _p = 0
     update.each do |page|
