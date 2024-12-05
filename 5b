@@ -1,0 +1,73 @@
+#!/usr/bin/env ruby
+#require_relative 'aoc'
+#input = AOC.read(5)
+
+input = <<'EOF'
+47|53
+97|13
+97|61
+97|47
+75|29
+61|13
+75|53
+29|13
+97|29
+53|29
+61|53
+97|53
+61|29
+47|13
+75|47
+97|75
+47|61
+75|61
+47|29
+75|13
+53|13
+
+75,47,61,53,29
+97,61,53,29,13
+75,29,13
+75,97,47,61,53
+61,13,29
+97,13,75,29,47
+EOF
+
+$rules = input.split("\n\n")[0].split("\n").map{|rule| rule.split("|")}
+updates = input.split("\n\n")[1].split("\n").map{|update| update.split(",")}
+
+# Get middle page index.
+def middle_index(update)
+  (update.length / 2).floor
+end
+
+# Get middle page number.
+def middle_number(update)
+  update[middle_index(update)]
+end
+
+# Check if the update is in the correct order.
+def correct?(update)
+  $rules.each do |rule|
+    # Check if both numbers in the rule exists in the update.
+    next unless rule.all? {|num| update.include?(num)}
+
+    # Check if the update obeys the rule.
+    ok = false
+    _p = 0
+    update.each do |page|
+      if page == rule[_p]
+        _p += 1
+        ok = true if _p == 2
+      end
+    end
+    return false unless ok
+  end
+  return true
+end
+
+incorrects = []
+updates.each do |update|
+  incorrects << update unless correct?(update)
+end
+p incorrects
