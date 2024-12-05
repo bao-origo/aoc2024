@@ -70,4 +70,14 @@ incorrects = []
 updates.each do |update|
   incorrects << update unless correct?(update)
 end
-p incorrects
+
+# TODO: Correct incorrect update.
+def correct(incorrect)
+  [1,2,3]
+end
+
+sum = 0
+incorrects.each do |incorrect|
+  sum += middle_number(correct(incorrect)).to_i
+end
+puts sum
