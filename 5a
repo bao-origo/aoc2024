@@ -15,7 +15,7 @@ def middle_number(update)
   update[middle_index(update)]
 end
 
-# TODO: Check if the update is in the correct order.
+# Check if the update is in the correct order.
 def correct?(update)
   $rules.each do |rule|
     # Check if both numbers in the rule exists in the update.
