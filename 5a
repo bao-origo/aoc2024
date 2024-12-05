@@ -39,5 +39,4 @@ sum = 0
 updates.each do |update|
   sum += middle_number(update).to_i if correct?(update)
 end
-
 puts sum
