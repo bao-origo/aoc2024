@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
-(1..5).each do |day|
-  puts "#{day}a: #{`./#{day}a`}"
-  puts "#{day}b: #{`./#{day}b`}"
+Dir.entries(Dir.pwd).select do |file|
+  file.match?(/^\d[ab]$/) # Regular expression for a number followed by either a or b.
+end.sort.each do |solution|
+  puts "#{solution}: #{`./#{solution}`}"
 end
