@@ -1,37 +1,6 @@
 #!/usr/bin/env ruby
-#require_relative 'aoc'
-#input = AOC.read(5)
-
-input = <<'EOF'
-47|53
-97|13
-97|61
-97|47
-75|29
-61|13
-75|53
-29|13
-97|29
-53|29
-61|53
-97|53
-61|29
-47|13
-75|47
-97|75
-47|61
-75|61
-47|29
-75|13
-53|13
-
-75,47,61,53,29
-97,61,53,29,13
-75,29,13
-75,97,47,61,53
-61,13,29
-97,13,75,29,47
-EOF
+require_relative 'aoc'
+input = AOC.read(5)
 
 $rules = input.split("\n\n")[0].split("\n").map{|rule| rule.split("|")}
 updates = input.split("\n\n")[1].split("\n").map{|update| update.split(",")}
@@ -71,9 +40,38 @@ updates.each do |update|
   incorrects << update unless correct?(update)
 end
 
-# TODO: Correct incorrect update.
+# Correct incorrect update.
 def correct(incorrect)
-  [1,2,3]
+  update = incorrect.dup
+  loop do
+    _retry = false
+    $rules.each do |rule|
+      # Check if both numbers in the rule exists in the update.
+      next unless rule.all? {|num| update.include?(num)}
+
+      # Check if the update obeys the rule.
+      ok = false
+      _p = 0
+      update.each do |page|
+        if page == rule[_p]
+          _p += 1
+          ok = true if _p == 2
+        end
+      end
+
+      # Check if the update is breaking the rules.
+      unless ok
+        # update is rule-breaking.
+
+        # Correct rule-breaking update.
+        indices = rule.map { |num| update.index(num) }
+        update[indices[0]], update[indices[1]] = update[indices[1]], update[indices[0]]
+        _retry = true
+      end
+    end
+    break unless _retry
+  end
+  return update
 end
 
 sum = 0
