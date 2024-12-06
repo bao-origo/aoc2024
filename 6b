@@ -2,33 +2,30 @@
 require_relative 'aoc'
 $input = AOC.read(6)
 
-#$input = <<'EOF'
-#....#.....
-#.........#
-#..........
-#..#.......
-#.......#..
-#..........
-#.#..^.....
-#........#.
-##.........
-#......#...
-#EOF
+$map = $input.split("\n")
+ROWS = $map.size
+COLUMNS = $map[0].size
+
+# Guard's position.
+catch :found do
+  for row in 0...ROWS
+    for column in 0...COLUMNS
+      if $map[row][column] == '^'
+        START_ROW = row
+        START_COLUMN = column
+        throw :found
+      end
+    end
+  end
+end
 
 def reset
   # Map of lab.
   $map = $input.split("\n")
-  $rows = $map.size
-  $columns = $map[0].size
 
-  # Guard's position.
-  catch :found do
-    for $row in 0...$rows
-      for $column in 0...$columns
-        throw :found if $map[$row][$column] == '^'
-      end
-    end
-  end
+  # Back to start.
+  $row = START_ROW
+  $column = START_COLUMN
 
   # Guard's direction, which begins at facing up.
   $direction_row = -1
@@ -38,7 +35,7 @@ reset
 
 # Is guard in-bound of map?
 def in_bounds?(row, column)
-  return 0 <= row && 0 <= column && row < $rows && column < $columns
+  return 0 <= row && 0 <= column && row < ROWS && column < COLUMNS
 end
 
 # Is guard about the hit the wall?
