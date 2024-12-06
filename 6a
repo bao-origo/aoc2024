@@ -23,24 +23,29 @@ end
 $direction_row = -1
 $direction_column = 0
 
+# Is guard in-bound of map?
 def in_bounds?(row, column)
-  false
+  return 0 < row || 0 < column || row <= $rows || column <= $columns
 end
 
+# Is guard about the hit the wall?
 def about_to_hit_wall?
   new_row, new_column = $row + $direction_row, $column + $direction_column
-  return false if !in_bounds(new_row, new_column)
-  return map[new_row][new_column] == '#'
+  return false if !in_bounds?(new_row, new_column)
+  return $map[new_row][new_column] == '#'
 end
 
+# Move guard once in the current direction.
 def move_guard
-  row += $direction_row
-  column += $direction_column
+  $row += $direction_row
+  $column += $direction_column
 
   $movements += 1 # The guard has moved to a new position, which counts as a movement.
 end
 
+# Turn the direction of the guard right.
 def turn_right
+  raise "TODO: Turn right."
 end
 
 # The guard will start in-bounds.
