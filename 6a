@@ -1,4 +1,27 @@
 #!/usr/bin/env ruby
 require_relative 'aoc'
 input = AOC.read(6)
-puts "TODO"
+
+map = input.split("\n")
+rows = map.size
+columns = map[0].size
+
+$movements = 0 # all movements including the guard's movement out of bounds will be equal to distincts positions, including start position, in the map.
+row = 0
+column = 0
+#column  = index - (row * row_length)
+
+def in_bounds?
+  false
+end
+
+def move_guard
+  $movements += 1
+end
+
+while in_bounds?
+  move_guard
+  # If hit wall, then turn 90 degree right.
+end
+
+puts "TODO: #{$movements}"
