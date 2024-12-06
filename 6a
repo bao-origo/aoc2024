@@ -1,6 +1,19 @@
 #!/usr/bin/env ruby
-require_relative 'aoc'
-input = AOC.read(6)
+#require_relative 'aoc'
+#input = AOC.read(6)
+
+input = <<'EOF'
+....#.....
+.........#
+..........
+..#.......
+.......#..
+..........
+.#..^.....
+........#.
+#.........
+......#...
+EOF
 
 # Map of lab.
 $map = input.split("\n")
@@ -25,7 +38,7 @@ $direction_column = 0
 
 # Is guard in-bound of map?
 def in_bounds?(row, column)
-  return 0 < row || 0 < column || row <= $rows || column <= $columns
+  return 0 <= row && 0 <= column && row < $rows && column < $columns
 end
 
 # Is guard about the hit the wall?
@@ -45,15 +58,34 @@ end
 
 # Turn the direction of the guard right.
 def turn_right
-  raise "TODO: Turn right."
+  if $direction_row == -1 && $direction_column == 0 # up
+    $direction_row = 0
+    $direction_column = 1 # turn to right
+    puts "moving right"
+  elsif $direction_row == 0 && $direction_column == 1 # right
+    $direction_row = 1
+    $direction_column = 0 # turn downwards.
+    puts "moving down"
+  elsif $direction_row == 1 && $direction_column == 0 # down.
+    $direction_row = 0
+    $direction_column = -1 # turn to left.
+    puts "moving left"
+  elsif $direction_row == 0 && $direction_column == -1 # left.
+    $direction_row = -1
+    $direction_column = 0 # turn upwards.
+    puts "moving up"
+  else
+    raise "invalid direction: #{$direction_row}, #{$direction_column}"
+  end
 end
 
 # The guard will start in-bounds.
 while in_bounds?($row, $column)
+  puts "row: #{$row}, column: #{$column}"
   while about_to_hit_wall?
     turn_right
   end
   move_guard
 end
 
-puts "TODO: #{$movements}"
+puts $movements
