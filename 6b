@@ -1,0 +1,99 @@
+#!/usr/bin/env ruby
+require_relative 'aoc'
+$input = AOC.read(6)
+
+#$input = <<'EOF'
+#....#.....
+#.........#
+#..........
+#..#.......
+#.......#..
+#..........
+#.#..^.....
+#........#.
+##.........
+#......#...
+#EOF
+
+def reset
+  # Map of lab.
+  $map = $input.split("\n")
+  $rows = $map.size
+  $columns = $map[0].size
+
+  # Guard's position.
+  catch :found do
+    for $row in 0...$rows
+      for $column in 0...$columns
+        throw :found if $map[$row][$column] == '^'
+      end
+    end
+  end
+
+  # Guard's direction, which begins at facing up.
+  $direction_row = -1
+  $direction_column = 0
+end
+reset
+
+# Is guard in-bound of map?
+def in_bounds?(row, column)
+  return 0 <= row && 0 <= column && row < $rows && column < $columns
+end
+
+# Is guard about the hit the wall?
+def about_to_hit_wall?
+  new_row, new_column = $row + $direction_row, $column + $direction_column
+  return false if !in_bounds?(new_row, new_column)
+  return $map[new_row][new_column] == '#'
+end
+
+# Move guard once in the current direction.
+def move_guard
+  $row += $direction_row
+  $column += $direction_column
+end
+
+# Turn the direction of the guard right.
+def turn_right
+  if $direction_row == -1 && $direction_column == 0 # up
+    $direction_row = 0
+    $direction_column = 1 # turn to right
+  elsif $direction_row == 0 && $direction_column == 1 # right
+    $direction_row = 1
+    $direction_column = 0 # turn downwards.
+  elsif $direction_row == 1 && $direction_column == 0 # down.
+    $direction_row = 0
+    $direction_column = -1 # turn to left.
+  elsif $direction_row == 0 && $direction_column == -1 # left.
+    $direction_row = -1
+    $direction_column = 0 # turn upwards.
+  else
+    raise "invalid direction: #{$direction_row}, #{$direction_column}"
+  end
+end
+
+# AHOY! SUPER STUPID SLOW FLAKY TIME-SENSITIVE BRUTE-FORCE SOLUTION!
+# (but it works)
+count = 0
+$map.each_with_index do |line,row|
+  line.each_char.with_index do |c,column|
+    reset
+    $map[row][column] = '#'
+    start_time = Time.now
+    catch :stuck do
+      while in_bounds?($row, $column)
+        while about_to_hit_wall?
+          turn_right
+        end
+        move_guard
+        end_time = Time.now
+        if 0.01 <= (end_time - start_time)
+          count += 1
+          throw :stuck
+        end
+      end
+    end
+  end
+end
+puts count
