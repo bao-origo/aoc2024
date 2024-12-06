@@ -4,32 +4,51 @@ input = AOC.read(6)
 
 # Map of lab.
 $map = input.split("\n")
-$rows = map.size
-$columns = map[0].size
+$rows = $map.size
+$columns = $map[0].size
 
-# Guard's movements.
+# Guard's movements. A movement is when the guard moves from one position to a new position.
 $movements = 0 # all movements including the guard's movement out of bounds will be equal to distincts positions, including start position, in the map.
 
 # Guard's position.
-$row = 0
-$column = 0
-#column  = index - (row * row_length)
+catch :found do
+  for $row in 0...$rows
+    for $column in 0...$columns
+      throw :found if $map[$row][$column] == '^'
+    end
+  end
+end
 
 # Guard's direction, which begins at facing up.
 $direction_row = -1
 $direction_column = 0
 
-def in_bounds?
+def in_bounds?(row, column)
   false
 end
 
-def move_guard
-  $movements += 1
+def about_to_hit_wall?
+  new_row, new_column = $row + $direction_row, $column + $direction_column
+  return false if !in_bounds(new_row, new_column)
+  return map[new_row][new_column] == '#'
 end
 
-while in_bounds?
+def move_guard
+  row += $direction_row
+  column += $direction_column
+
+  $movements += 1 # The guard has moved to a new position, which counts as a movement.
+end
+
+def turn_right
+end
+
+# The guard will start in-bounds.
+while in_bounds?($row, $column)
+  while about_to_hit_wall?
+    turn_right
+  end
   move_guard
-  # If hit wall, then turn 90 degree right.
 end
 
 puts "TODO: #{$movements}"
