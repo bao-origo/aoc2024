@@ -1,27 +1,12 @@
 #!/usr/bin/env ruby
-#require_relative 'aoc'
-#input = AOC.read(6)
-
-input = <<'EOF'
-....#.....
-.........#
-..........
-..#.......
-.......#..
-..........
-.#..^.....
-........#.
-#.........
-......#...
-EOF
+require_relative 'aoc'
+input = AOC.read(6)
 
 # Map of lab.
 $map = input.split("\n")
 $rows = $map.size
 $columns = $map[0].size
-
-# Guard's movements. A movement is when the guard moves from one position to a new position.
-$movements = 0 # all movements including the guard's movement out of bounds will be equal to distincts positions, including start position, in the map.
+$stepped = Array.new($rows) { Array.new($columns, false) }
 
 # Guard's position.
 catch :found do
@@ -52,8 +37,6 @@ end
 def move_guard
   $row += $direction_row
   $column += $direction_column
-
-  $movements += 1 # The guard has moved to a new position, which counts as a movement.
 end
 
 # Turn the direction of the guard right.
@@ -61,19 +44,15 @@ def turn_right
   if $direction_row == -1 && $direction_column == 0 # up
     $direction_row = 0
     $direction_column = 1 # turn to right
-    puts "moving right"
   elsif $direction_row == 0 && $direction_column == 1 # right
     $direction_row = 1
     $direction_column = 0 # turn downwards.
-    puts "moving down"
   elsif $direction_row == 1 && $direction_column == 0 # down.
     $direction_row = 0
     $direction_column = -1 # turn to left.
-    puts "moving left"
   elsif $direction_row == 0 && $direction_column == -1 # left.
     $direction_row = -1
     $direction_column = 0 # turn upwards.
-    puts "moving up"
   else
     raise "invalid direction: #{$direction_row}, #{$direction_column}"
   end
@@ -81,11 +60,17 @@ end
 
 # The guard will start in-bounds.
 while in_bounds?($row, $column)
-  puts "row: #{$row}, column: #{$column}"
+  $stepped[$row][$column] = true
   while about_to_hit_wall?
     turn_right
   end
   move_guard
 end
 
-puts $movements
+count = 0
+$stepped.each do |row|
+  row.each do |value|
+    count += 1 if value == true
+  end
+end
+puts count
