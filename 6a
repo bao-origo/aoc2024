@@ -2,14 +2,22 @@
 require_relative 'aoc'
 input = AOC.read(6)
 
-map = input.split("\n")
-rows = map.size
-columns = map[0].size
+# Map of lab.
+$map = input.split("\n")
+$rows = map.size
+$columns = map[0].size
 
+# Guard's movements.
 $movements = 0 # all movements including the guard's movement out of bounds will be equal to distincts positions, including start position, in the map.
-row = 0
-column = 0
+
+# Guard's position.
+$row = 0
+$column = 0
 #column  = index - (row * row_length)
+
+# Guard's direction, which begins at facing up.
+$direction_row = -1
+$direction_column = 0
 
 def in_bounds?
   false
