@@ -6,6 +6,6 @@ lines = input.split("\n")
 calibrations = {}
 lines.each do |line|
   splitted = line.split(":")
-  calibrations[splitted[0]] = splitted[1].strip
+  calibrations[splitted[0].to_i] = splitted[1].strip.split(" ").map{|number| number.to_i}
 end
 puts "TODO"
