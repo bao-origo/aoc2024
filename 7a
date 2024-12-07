@@ -1,0 +1,11 @@
+#!/usr/bin/env ruby
+require_relative 'aoc'
+input = AOC.read(7)
+
+lines = input.split("\n")
+calibrations = {}
+lines.each do |line|
+  splitted = line.split(":")
+  calibrations[splitted[0]] = splitted[1].strip
+end
+puts "TODO"
