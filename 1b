@@ -1,16 +1,7 @@
 #!/usr/bin/env ruby
 require_relative 'aoc'
 input = AOC.read(1)
-
 all = input.split
 left = all.map.with_index.select{ |item, index| index % 2 == 0 }.map {|val, i| val.to_i}.sort
 right = all.map.with_index.select{ |item, index| index % 2 != 0 }.map {|val, i| val.to_i}.sort
-sum = 0
-left.each do |left_number|
-  count = 0
-  right.each do |right_number|
-    count += 1 if left_number == right_number
-  end
-  sum += left_number * count
-end
-puts sum
+puts left.reduce(0) { |sum, left_number| sum + left_number * (right.reduce(0) { |count, right_number| left_number == right_number ? count + 1 : count}) }
