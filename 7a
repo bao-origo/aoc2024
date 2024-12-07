@@ -8,4 +8,22 @@ lines.each do |line|
   splitted = line.split(":")
   calibrations[splitted[0].to_i] = splitted[1].strip.split(" ").map{|number| number.to_i}
 end
-puts "TODO"
+
+sum = 0
+calibrations.each do |key, value|
+  catch :found do
+    operator_combinations = [:+, :*].repeated_permutation(value.length-1).to_a
+    operator_combinations.each do |operators|
+      calibration_result = value[0].send(operators[0], value[1])
+      operators.each_with_index do |operator, index|
+        next if index == 0
+        calibration_result = calibration_result.send(operator, value[index+1])
+      end
+      if calibration_result == key
+        sum += calibration_result
+        throw :found
+      end
+    end
+  end
+end
+puts sum
