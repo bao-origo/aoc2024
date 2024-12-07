@@ -1,12 +1,7 @@
 #!/usr/bin/env ruby
 require_relative 'aoc'
 input = AOC.read(1)
-
 all = input.split
 left = all.map.with_index.select{ |item, index| index % 2 == 0 }.map {|val, i| val.to_i}.sort
 right = all.map.with_index.select{ |item, index| index % 2 != 0 }.map {|val, i| val.to_i}.sort
-sum = 0
-(0...left.length).each { |i|
-  sum += (left[i] - right[i]).abs
-}
-puts sum
+puts (0...left.length).reduce(0) { |sum, i| sum + (left[i] - right[i]).abs }
