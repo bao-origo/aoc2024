@@ -1,4 +1,9 @@
 #!/usr/bin/env ruby
 require_relative 'aoc'
 input = AOC.read(8)
+
+map = input.split
+rows = map.size
+columns = map[0].size
+
 print "TODO"
