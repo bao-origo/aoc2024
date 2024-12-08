@@ -2,8 +2,23 @@
 require_relative 'aoc'
 input = AOC.read(8)
 
+# Build map of antennas from input.
 map = input.split
 rows = map.size
 columns = map[0].size
+
+# Find the position of all antennas and group them by name.
+antennas = {}
+map.each_with_index do |line, i|
+  line.each_char.with_index do |c, j|
+    if c =~ /^[a-zA-Z0-9]$/
+      antennas[c] = [] if antennas[c].nil?
+      antennas[c] << [i, j]
+    end
+  end
+end
+p antennas
+
+antinodes = Array.new(rows) { Array.new(columns, false) }
 
 print "TODO"
