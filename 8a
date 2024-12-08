@@ -19,7 +19,6 @@ map.each_with_index do |line, i|
 end
 
 # Find positions of all antinodes.
-require 'set'
 antinodes = Set.new
 antennas.each do |key, resonant_antennas|
   resonant_antennas.each_with_index do |antenna1, i1|
