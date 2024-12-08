@@ -19,7 +19,8 @@ map.each_with_index do |line, i|
 end
 
 # Find positions of all antinodes.
-antinodes = []
+require 'set'
+antinodes = Set.new
 antennas.each do |key, resonant_antennas|
   resonant_antennas.each_with_index do |antenna1, i1|
     resonant_antennas.each_with_index do |antenna2, i2|
@@ -31,17 +32,4 @@ antennas.each do |key, resonant_antennas|
     end
   end
 end
-
-# Put antinodes in the map.
-antinodes.each do |antinode|
-  map[antinode[0]][antinode[1]] = '#'
-end
-
-# Count number of antinodes.
-count = 0
-map.each do |row|
-  row.each_char do |column|
-    count += 1 if column == '#'
-  end
-end
-puts count
+puts antinodes.length
