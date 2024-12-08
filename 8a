@@ -1,20 +1,6 @@
 #!/usr/bin/env ruby
-#require_relative 'aoc'
-#input = AOC.read(8)
-input = <<'EOF'
-............
-........0...
-.....0......
-.......0....
-....0.......
-......A.....
-............
-............
-........A...
-.........A..
-............
-............
-EOF
+require_relative 'aoc'
+input = AOC.read(8)
 
 # Build map of antennas from input.
 map = input.split
@@ -51,16 +37,7 @@ antinode_map = Array.new(rows) { Array.new(columns, '.') }
 antinodes.each do |antinode|
   i, j = antinode[0], antinode[1]
   antinode_map[i][j] = '#'
-  #map[i][j] = '#'
 end
-#puts map
-#antinode_map.each_with_index do |row, i|
-#  row.each_with_index do |column, j|
-#    print column
-#  end
-#  print "\n"
-#end
-#exit
 
 # Count number of antinodes.
 count = 0
