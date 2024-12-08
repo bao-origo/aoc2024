@@ -1,6 +1,20 @@
 #!/usr/bin/env ruby
-require_relative 'aoc'
-input = AOC.read(8)
+#require_relative 'aoc'
+#input = AOC.read(8)
+input = <<'EOF'
+............
+........0...
+.....0......
+.......0....
+....0.......
+......A.....
+............
+............
+........A...
+.........A..
+............
+............
+EOF
 
 # Build map of antennas from input.
 map = input.split
@@ -17,20 +31,42 @@ map.each_with_index do |line, i|
     end
   end
 end
-p antennas
 
-# TODO: Find positions of all antinodes.
+# Find positions of all antinodes.
 antinodes = []
+antennas.each do |key, resonant_antennas|
+  resonant_antennas.each_with_index do |antenna1, i1|
+    resonant_antennas.each_with_index do |antenna2, i2|
+      next if i1 == i2
+      diff = [antenna1[0] - antenna2[0], antenna1[1] - antenna2[1]]
+      ai, aj = antenna2[0] + diff[0], antenna2[1] + diff[1]
+      next if ai < 0 or aj < 0 or rows <= ai or columns <= aj
+      antinodes << [ai, aj]
+    end
+  end
+end
 
-# TODO: Put them in a map.
-antinode_map = Array.new(rows) { Array.new(columns, false) }
+# Put them in a map.
+antinode_map = Array.new(rows) { Array.new(columns, '.') }
+antinodes.each do |antinode|
+  i, j = antinode[0], antinode[1]
+  antinode_map[i][j] = '#'
+  map[i][j] = '#'
+end
+puts map
+antinode_map.each_with_index do |row, i|
+  row.each_with_index do |column, j|
+    print column
+  end
+  print "\n"
+end
+exit
 
 # Count number of antinodes.
 count = 0
 antinode_map.each do |row|
   row.each do |column|
-    count += 1 if column
+    count += 1 if column == '#'
   end
 end
-#puts count
-print "TODO"
+puts count
