@@ -7,8 +7,6 @@ map = input.split
 rows = map.size
 columns = map[0].size
 
-antinode_map = Array.new(rows) { Array.new(columns, '.') }
-
 # Find the position of all antennas, group them by name and use it to map the antinodes.
 antennas = {}
 map.each_with_index do |line, i|
@@ -16,7 +14,7 @@ map.each_with_index do |line, i|
     if c =~ /^[a-zA-Z0-9]$/
       antennas[c] = [] if antennas[c].nil?
       antennas[c] << [i, j]
-      antinode_map[i][j] = '#'
+      map[i][j] = '#'
     end
   end
 end
@@ -44,14 +42,13 @@ end
 
 # Put them in a map.
 antinodes.each do |antinode|
-  i, j = antinode[0], antinode[1]
-  antinode_map[i][j] = '#'
+  map[antinode[0]][antinode[1]] = '#'
 end
 
 # Count number of antinodes.
 count = 0
-antinode_map.each do |row|
-  row.each do |column|
+map.each do |row|
+  row.each_char do |column|
     count += 1 if column == '#'
   end
 end

@@ -32,17 +32,15 @@ antennas.each do |key, resonant_antennas|
   end
 end
 
-# Put them in a map.
-antinode_map = Array.new(rows) { Array.new(columns, '.') }
+# Put antinodes in the map.
 antinodes.each do |antinode|
-  i, j = antinode[0], antinode[1]
-  antinode_map[i][j] = '#'
+  map[antinode[0]][antinode[1]] = '#'
 end
 
 # Count number of antinodes.
 count = 0
-antinode_map.each do |row|
-  row.each do |column|
+map.each do |row|
+  row.each_char do |column|
     count += 1 if column == '#'
   end
 end
