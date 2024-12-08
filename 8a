@@ -19,6 +19,18 @@ map.each_with_index do |line, i|
 end
 p antennas
 
-antinodes = Array.new(rows) { Array.new(columns, false) }
+# TODO: Find positions of all antinodes.
+antinodes = []
 
+# TODO: Put them in a map.
+antinode_map = Array.new(rows) { Array.new(columns, false) }
+
+# Count number of antinodes.
+count = 0
+antinode_map.each do |row|
+  row.each do |column|
+    count += 1 if column
+  end
+end
+#puts count
 print "TODO"
