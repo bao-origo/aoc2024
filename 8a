@@ -1,0 +1,4 @@
+#!/usr/bin/env ruby
+require_relative 'aoc'
+input = AOC.read(8)
+print "TODO"
