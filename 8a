@@ -39,7 +39,7 @@ antennas.each do |key, resonant_antennas|
     resonant_antennas.each_with_index do |antenna2, i2|
       next if i1 == i2
       diff = [antenna1[0] - antenna2[0], antenna1[1] - antenna2[1]]
-      ai, aj = antenna2[0] + diff[0], antenna2[1] + diff[1]
+      ai, aj = antenna1[0] + diff[0], antenna1[1] + diff[1]
       next if ai < 0 or aj < 0 or rows <= ai or columns <= aj
       antinodes << [ai, aj]
     end
@@ -51,16 +51,16 @@ antinode_map = Array.new(rows) { Array.new(columns, '.') }
 antinodes.each do |antinode|
   i, j = antinode[0], antinode[1]
   antinode_map[i][j] = '#'
-  map[i][j] = '#'
+  #map[i][j] = '#'
 end
-puts map
-antinode_map.each_with_index do |row, i|
-  row.each_with_index do |column, j|
-    print column
-  end
-  print "\n"
-end
-exit
+#puts map
+#antinode_map.each_with_index do |row, i|
+#  row.each_with_index do |column, j|
+#    print column
+#  end
+#  print "\n"
+#end
+#exit
 
 # Count number of antinodes.
 count = 0
