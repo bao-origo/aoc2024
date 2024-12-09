@@ -6,14 +6,10 @@ blocks = []
 j = 0
 input.each_char.with_index do |n, i|
   if i.even? # n block file.
-    n.to_i.times do
-      blocks << j.to_s
-    end
+    n.to_i.times { blocks << j.to_s }
     j += 1
   else # free block space.
-    n.to_i.times do
-      blocks << '.'
-    end
+    n.to_i.times { blocks << '.' }
   end
 end
 
