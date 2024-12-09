@@ -2,7 +2,7 @@
 require_relative 'aoc'
 input = AOC.read(9).strip
 
-blocks = ""
+blocks = []
 j = 0
 input.each_char.with_index do |n, i|
   if i.even? # n block file.
@@ -17,20 +17,24 @@ input.each_char.with_index do |n, i|
   end
 end
 
-(blocks.length-1).downto(0).each do |j|
-  if blocks[j] != '.'
-    (0...blocks.length).each do |i|
-      if blocks[i] == '.'
-        blocks[i], blocks[j] = blocks[j], blocks[i]
-        break
+catch :done do
+  last_i = 0
+  (blocks.length-1).downto(0).each do |j|
+    if blocks[j] != '.'
+      (last_i...j).each do |i|
+        if blocks[i] == '.'
+          blocks[i], blocks[j] = blocks[j], blocks[i]
+          last_i = i
+          throw :done if i == j
+          break
+        end
       end
     end
   end
 end
-blocks = blocks[1..] + '.'
 
 result = 0
-blocks.each_char.with_index do |c, i|
+blocks.each_with_index do |c, i|
   next if c == '.'
   result += i * c.to_i
 end
