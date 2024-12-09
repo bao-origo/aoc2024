@@ -24,8 +24,8 @@ catch :done do
       (last_i...j).each do |i|
         if blocks[i] == '.'
           blocks[i], blocks[j] = blocks[j], blocks[i]
-          last_i = i
           throw :done if i == j
+          last_i = i
           break
         end
       end
