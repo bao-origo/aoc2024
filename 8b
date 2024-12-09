@@ -19,7 +19,10 @@ map.each_with_index do |line, i|
 end
 
 # Find positions of all antinodes.
-antinodes = Set.new
+antinodes = antennas.reduce(Set.new) do |antinodes, (name, positions)|
+  positions.each { |position| antinodes << position }
+  antinodes
+end
 antennas.each do |key, resonant_antennas|
   resonant_antennas.each_with_index do |antenna1, i1|
     resonant_antennas.each_with_index do |antenna2, i2|
@@ -27,16 +30,16 @@ antennas.each do |key, resonant_antennas|
       diff = [antenna1[0] - antenna2[0], antenna1[1] - antenna2[1]]
       ai, aj = antenna1[0] + diff[0], antenna1[1] + diff[1]
       next if ai < 0 or aj < 0 or rows <= ai or columns <= aj
-      antinodes << [ai, aj] if antennas.all? { |key, value| !value.include?([ai, aj]) }
+      antinodes << [ai, aj]
       loop do
         ai += diff[0]
         aj += diff[1]
         break if ai < 0 or aj < 0 or rows <= ai or columns <= aj
-        antinodes << [ai, aj] if antennas.all? { |key, value| !value.include?([ai, aj]) }
+        antinodes << [ai, aj]
       end
     end
   end
 end
 
 # Print out unique locations within the bounds of the map that contain an antinode.
-puts antinodes.length + (antennas.reduce(0) {|sum, (name, positions)| sum + positions.size })
+puts antinodes.length
