@@ -1,6 +1,10 @@
 #!/usr/bin/env ruby
 require_relative 'aoc'
 input = AOC.read(9).strip
+input = <<'EOF'
+2333133121414131402
+EOF
+input.strip
 
 blocks = ""
 j = 0
@@ -13,6 +17,17 @@ input.each_char.with_index do |n, i|
   else # free block space.
     n.to_i.times do
       blocks << '.'
+    end
+  end
+end
+puts blocks
+
+(blocks.length-1).downto(0).each do |j|
+  if blocks[j] != '.'
+    (0...blocks.length).each do |i|
+      if blocks[i] == '.'
+        blocks[i], blocks[j] = blocks[j], blocks[i]
+      end
     end
   end
 end
