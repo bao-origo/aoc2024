@@ -5,10 +5,12 @@ input = "2333133121414131402"
 
 $files = []
 j = 0
+last_id = nil
 input.each_char.with_index do |n, i|
   if i.even? # n block file.
     $files << Array.new(n.to_i) { j.to_s }
     j += 1
+    last_id = j
   else # free block space.
     next if n.to_i == 0
     $files << Array.new(n.to_i) { '.' }
@@ -61,13 +63,17 @@ catch :done do
         (0...j).each do |i|
           file_i = $files[i]
           next if file_i[0] != '.' or file_i.length < file_j.length
+          next if last_id < file_j[0].to_i
           file_j.each_with_index do |value, index|
             file_i[index] = value
           end
           #dot_index = file_i.index(".")
+          last_id = file_j[0].to_i
           file_j.fill('.')
           $files = come_together($files.flatten)
-          p $files
+          #p $files
+          #debugp
+          #p last_id
           last_j = j
           #throw :retry if dot_index.nil?
           #$files[i] = file_i[0...dot_index]
@@ -82,16 +88,16 @@ catch :done do
   end
 end
 
-debugw
-File.open("sorted_ds.txt", "w") do |file|
-  $stdout = file
-  p $files
-  $stdout = STDOUT
-end
-File.open("sorted_ds_flatten.txt", "w") do |file|
-  $stdout = file
-  p $files.flatten
-  $stdout = STDOUT
-end
+#debugw
+#File.open("sorted_ds.txt", "w") do |file|
+#  $stdout = file
+#  p $files
+#  $stdout = STDOUT
+#end
+#File.open("sorted_ds_flatten.txt", "w") do |file|
+#  $stdout = file
+#  p $files.flatten
+#  $stdout = STDOUT
+#end
 
 puts ($files.flatten.each.with_index.reduce(0) { |result, (c, i)| c == '.' ? result : (result + (i * c.to_i)) })
