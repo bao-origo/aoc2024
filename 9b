@@ -1,7 +1,6 @@
 #!/usr/bin/env ruby
 require_relative 'aoc'
-#input = AOC.read(9).strip
-input = "2333133121414131402"
+input = AOC.read(9).strip
 
 $files = []
 j = 0
@@ -84,7 +83,7 @@ catch :done do
         throw :done if j == 0
       end
     end
-    puts "j: #{last_j}"
+    #puts "j: #{last_j}"
   end
 end
 
