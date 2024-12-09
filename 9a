@@ -16,7 +16,7 @@ end
 last_i = 0
 (blocks.length-1).downto(0).each do |j|
   if blocks[j] != '.'
-    ((last_i+1)...j).each do |i|
+    (last_i...j).each do |i|
       if blocks[i] == '.'
         blocks[i], blocks[j] = blocks[j], blocks[i]
         last_i = i
