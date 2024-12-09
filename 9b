@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-#require_relative 'aoc'
+require_relative 'aoc'
 #input = AOC.read(9).strip
 input = "2333133121414131402"
 
@@ -20,12 +20,40 @@ def debugp
   print "\n"
 end
 
-count = 0
+def debugw
+  File.open("sorted.txt", "w") do |file|
+    $files.flatten.each { |c| file.print c }
+    file.print "\n"
+  end
+end
+
+def come_together(array)
+  # Initialize an empty array to hold the grouped elements
+  grouped = []
+
+  # Initialize a temporary array to hold the current group
+  current_group = []
+
+  array.each do |element|
+    if current_group.empty? || current_group.last == element
+      # If the current group is empty or the last element is the same, add to the current group
+      current_group << element
+    else
+      # If the last element is different, push the current group to the grouped array and start a new group
+      grouped << current_group
+      current_group = [element]
+    end
+  end
+
+  # Don't forget to add the last group to the grouped array
+  grouped << current_group unless current_group.empty?
+
+  return grouped
+end
+
+last_j = nil
 catch :done do
   loop do
-    p $files
-    debugp
-    #exit if count == 10
     catch :retry do
       ($files.length-1).downto(0).each do |j|
         file_j = $files[j]
@@ -36,18 +64,34 @@ catch :done do
           file_j.each_with_index do |value, index|
             file_i[index] = value
           end
-          dot_index = file_i.index(".")
+          #dot_index = file_i.index(".")
           file_j.fill('.')
-          throw :retry if dot_index.nil?
-          $files[i] = file_i[0...dot_index]
-          $files.insert(i+1, file_i[dot_index..dot_index])
+          $files = come_together($files.flatten)
+          p $files
+          last_j = j
+          #throw :retry if dot_index.nil?
+          #$files[i] = file_i[0...dot_index]
+          #$files.insert(i+1, file_i[dot_index..dot_index])
           throw :retry
         end
+        last_j = j
         throw :done if j == 0
       end
     end
-    count += 1
+    puts "j: #{last_j}"
   end
+end
+
+debugw
+File.open("sorted_ds.txt", "w") do |file|
+  $stdout = file
+  p $files
+  $stdout = STDOUT
+end
+File.open("sorted_ds_flatten.txt", "w") do |file|
+  $stdout = file
+  p $files.flatten
+  $stdout = STDOUT
 end
 
 puts ($files.flatten.each.with_index.reduce(0) { |result, (c, i)| c == '.' ? result : (result + (i * c.to_i)) })
