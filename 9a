@@ -17,17 +17,14 @@ input.each_char.with_index do |n, i|
   end
 end
 
-catch :done do
-  last_i = 0
-  (blocks.length-1).downto(0).each do |j|
-    if blocks[j] != '.'
-      (last_i...j).each do |i|
-        if blocks[i] == '.'
-          blocks[i], blocks[j] = blocks[j], blocks[i]
-          throw :done if i == j
-          last_i = i
-          break
-        end
+last_i = 0
+(blocks.length-1).downto(0).each do |j|
+  if blocks[j] != '.'
+    (last_i...j).each do |i|
+      if blocks[i] == '.'
+        blocks[i], blocks[j] = blocks[j], blocks[i]
+        last_i = i
+        break
       end
     end
   end
