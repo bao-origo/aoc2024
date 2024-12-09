@@ -26,9 +26,4 @@ last_i = 0
   end
 end
 
-result = 0
-blocks.each_with_index do |c, i|
-  next if c == '.'
-  result += i * c.to_i
-end
-puts result
+puts (blocks.each.with_index.reduce(0) { |result, (c, i)| c == '.' ? result : (result + (i * c.to_i)) })
