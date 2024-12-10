@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
 require_relative 'aoc'
 input = AOC.read(10)
+map = input.split.map {|line| line.chars.map { |height| height.to_i } }
 puts "TODO"
